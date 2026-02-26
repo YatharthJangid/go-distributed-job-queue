@@ -1,0 +1,11 @@
+language: go
+go:
+  - 1.21.x
+services:
+  - redis-server
+env:
+  - REDISURL=127.0.0.1:6379
+before_script:
+  - cd lib_optimized
+script:
+  - go test -v -cover

@@ -1,0 +1,12 @@
+# Ignore development clutter and AI iterations
+idk/
+claude updated/
+figures_extra/
+paper_results/New folder/
+
+# Ignore temporary test files and backups
+*.backup
+coverage
+coverage.out
+coverage.html
+*.pptx
