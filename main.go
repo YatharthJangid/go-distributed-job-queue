@@ -35,10 +35,6 @@ func main() {
 		lib.RunBenchmarks()
 		return
 	}
-	configPath = flag.String("c", "config.json", "config")
-	mode = flag.String("o", "produce", "produce/consume")
-	numWorkers = flag.Int("w", 3, "workers")
-	flag.Parse()
 
 	config, err := lib.InitConfig(*configPath)
 	if err != nil {

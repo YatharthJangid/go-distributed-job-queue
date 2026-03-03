@@ -1,0 +1,8 @@
+2026-02-26T07:20:39.8350000Z Evaluating test.if
+2026-02-26T07:20:39.8350000Z Evaluating: success()
+2026-02-26T07:20:39.8350000Z Result: true
+2026-02-26T07:20:39.8360000Z Requested labels: ubuntu-latest
+2026-02-26T07:20:39.8360000Z Job defined at: YatharthJangid/go-distributed-job-queue/.github/workflows/go-test.yml@refs/heads/master
+2026-02-26T07:20:39.8360000Z Waiting for a runner to pick up this job...
+2026-02-26T07:20:39.8450000Z Job is waiting for a hosted runner to come online.
+2026-02-26T07:20:39.8450000Z Job is about to start running on the hosted runner: GitHub Actions 1000000005

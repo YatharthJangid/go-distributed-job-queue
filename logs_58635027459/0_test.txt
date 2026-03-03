@@ -1,0 +1,297 @@
+﻿2026-02-26T07:20:42.0224949Z Current runner version: '2.331.0'
+2026-02-26T07:20:42.0250641Z ##[group]Runner Image Provisioner
+2026-02-26T07:20:42.0251459Z Hosted Compute Agent
+2026-02-26T07:20:42.0252153Z Version: 20260213.493
+2026-02-26T07:20:42.0252729Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-02-26T07:20:42.0253404Z Build Date: 2026-02-13T00:28:41Z
+2026-02-26T07:20:42.0254127Z Worker ID: {cd95ced6-ec52-4f88-903e-ee70dcfda5c4}
+2026-02-26T07:20:42.0254826Z Azure Region: northcentralus
+2026-02-26T07:20:42.0255404Z ##[endgroup]
+2026-02-26T07:20:42.0257261Z ##[group]Operating System
+2026-02-26T07:20:42.0257840Z Ubuntu
+2026-02-26T07:20:42.0258313Z 24.04.3
+2026-02-26T07:20:42.0259239Z LTS
+2026-02-26T07:20:42.0259772Z ##[endgroup]
+2026-02-26T07:20:42.0260369Z ##[group]Runner Image
+2026-02-26T07:20:42.0260952Z Image: ubuntu-24.04
+2026-02-26T07:20:42.0261491Z Version: 20260224.36.1
+2026-02-26T07:20:42.0262702Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260224.36/images/ubuntu/Ubuntu2404-Readme.md
+2026-02-26T07:20:42.0264131Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260224.36
+2026-02-26T07:20:42.0265052Z ##[endgroup]
+2026-02-26T07:20:42.0266190Z ##[group]GITHUB_TOKEN Permissions
+2026-02-26T07:20:42.0268291Z Contents: read
+2026-02-26T07:20:42.0269301Z Metadata: read
+2026-02-26T07:20:42.0269795Z Packages: read
+2026-02-26T07:20:42.0270391Z ##[endgroup]
+2026-02-26T07:20:42.0272413Z Secret source: Actions
+2026-02-26T07:20:42.0273634Z Prepare workflow directory
+2026-02-26T07:20:42.0609868Z Prepare all required actions
+2026-02-26T07:20:42.0648119Z Getting action download info
+2026-02-26T07:20:42.3938960Z Download action repository 'actions/checkout@v3' (SHA:f43a0e5ff2bd294095638e18286ca9a3d1956744)
+2026-02-26T07:20:42.5691769Z Download action repository 'actions/setup-go@v4' (SHA:7b8cf10d4e4a01d4992d18a89f4d7dc5a3e6d6f4)
+2026-02-26T07:20:43.0667739Z Complete job name: test
+2026-02-26T07:20:43.1397386Z ##[group]Run actions/checkout@v3
+2026-02-26T07:20:43.1398224Z with:
+2026-02-26T07:20:43.1398987Z   repository: YatharthJangid/go-distributed-job-queue
+2026-02-26T07:20:43.1399948Z   token: ***
+2026-02-26T07:20:43.1400329Z   ssh-strict: true
+2026-02-26T07:20:43.1400750Z   persist-credentials: true
+2026-02-26T07:20:43.1401184Z   clean: true
+2026-02-26T07:20:43.1401592Z   sparse-checkout-cone-mode: true
+2026-02-26T07:20:43.1402075Z   fetch-depth: 1
+2026-02-26T07:20:43.1402452Z   fetch-tags: false
+2026-02-26T07:20:43.1402834Z   lfs: false
+2026-02-26T07:20:43.1403188Z   submodules: false
+2026-02-26T07:20:43.1403593Z   set-safe-directory: true
+2026-02-26T07:20:43.1404294Z ##[endgroup]
+2026-02-26T07:20:43.2301228Z Syncing repository: YatharthJangid/go-distributed-job-queue
+2026-02-26T07:20:43.2303191Z ##[group]Getting Git version info
+2026-02-26T07:20:43.2304071Z Working directory is '/home/runner/work/go-distributed-job-queue/go-distributed-job-queue'
+2026-02-26T07:20:43.2305277Z [command]/usr/bin/git version
+2026-02-26T07:20:43.2414310Z git version 2.53.0
+2026-02-26T07:20:43.2441821Z ##[endgroup]
+2026-02-26T07:20:43.2457039Z Temporarily overriding HOME='/home/runner/work/_temp/6056feef-22e9-44fb-9dcb-97c783bcc8cd' before making global git config changes
+2026-02-26T07:20:43.2458376Z Adding repository directory to the temporary git global config as a safe directory
+2026-02-26T07:20:43.2463122Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/go-distributed-job-queue/go-distributed-job-queue
+2026-02-26T07:20:43.2506956Z Deleting the contents of '/home/runner/work/go-distributed-job-queue/go-distributed-job-queue'
+2026-02-26T07:20:43.2511641Z ##[group]Initializing the repository
+2026-02-26T07:20:43.2515743Z [command]/usr/bin/git init /home/runner/work/go-distributed-job-queue/go-distributed-job-queue
+2026-02-26T07:20:43.2667531Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-02-26T07:20:43.2669163Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-02-26T07:20:43.2670082Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-02-26T07:20:43.2671692Z hint: call:
+2026-02-26T07:20:43.2672107Z hint:
+2026-02-26T07:20:43.2672603Z hint: 	git config --global init.defaultBranch <name>
+2026-02-26T07:20:43.2673837Z hint:
+2026-02-26T07:20:43.2674845Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-02-26T07:20:43.2676494Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-02-26T07:20:43.2677787Z hint:
+2026-02-26T07:20:43.2678707Z hint: 	git branch -m <name>
+2026-02-26T07:20:43.2679517Z hint:
+2026-02-26T07:20:43.2680506Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-02-26T07:20:43.2682564Z Initialized empty Git repository in /home/runner/work/go-distributed-job-queue/go-distributed-job-queue/.git/
+2026-02-26T07:20:43.2685778Z [command]/usr/bin/git remote add origin https://github.com/YatharthJangid/go-distributed-job-queue
+2026-02-26T07:20:43.2719357Z ##[endgroup]
+2026-02-26T07:20:43.2720552Z ##[group]Disabling automatic garbage collection
+2026-02-26T07:20:43.2722549Z [command]/usr/bin/git config --local gc.auto 0
+2026-02-26T07:20:43.2750371Z ##[endgroup]
+2026-02-26T07:20:43.2751552Z ##[group]Setting up auth
+2026-02-26T07:20:43.2756699Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-02-26T07:20:43.2787164Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-02-26T07:20:43.3167008Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-02-26T07:20:43.3201558Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-02-26T07:20:43.3443335Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-02-26T07:20:43.3478763Z ##[endgroup]
+2026-02-26T07:20:43.3479784Z ##[group]Fetching the repository
+2026-02-26T07:20:43.3486880Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin +bfb0775ac6c2dc987c81d2ae82c962db87ac92da:refs/remotes/origin/master
+2026-02-26T07:20:43.5625692Z remote: Enumerating objects: 30, done.        
+2026-02-26T07:20:43.5627432Z remote: Counting objects:   3% (1/30)        
+2026-02-26T07:20:43.5629121Z remote: Counting objects:   6% (2/30)        
+2026-02-26T07:20:43.5630411Z remote: Counting objects:  10% (3/30)        
+2026-02-26T07:20:43.5631291Z remote: Counting objects:  13% (4/30)        
+2026-02-26T07:20:43.5632135Z remote: Counting objects:  16% (5/30)        
+2026-02-26T07:20:43.5632974Z remote: Counting objects:  20% (6/30)        
+2026-02-26T07:20:43.5633879Z remote: Counting objects:  23% (7/30)        
+2026-02-26T07:20:43.5634735Z remote: Counting objects:  26% (8/30)        
+2026-02-26T07:20:43.5635603Z remote: Counting objects:  30% (9/30)        
+2026-02-26T07:20:43.5636456Z remote: Counting objects:  33% (10/30)        
+2026-02-26T07:20:43.5637344Z remote: Counting objects:  36% (11/30)        
+2026-02-26T07:20:43.5638300Z remote: Counting objects:  40% (12/30)        
+2026-02-26T07:20:43.5639511Z remote: Counting objects:  43% (13/30)        
+2026-02-26T07:20:43.5640527Z remote: Counting objects:  46% (14/30)        
+2026-02-26T07:20:43.5641557Z remote: Counting objects:  50% (15/30)        
+2026-02-26T07:20:43.5642612Z remote: Counting objects:  53% (16/30)        
+2026-02-26T07:20:43.5643668Z remote: Counting objects:  56% (17/30)        
+2026-02-26T07:20:43.5644705Z remote: Counting objects:  60% (18/30)        
+2026-02-26T07:20:43.5645750Z remote: Counting objects:  63% (19/30)        
+2026-02-26T07:20:43.5646791Z remote: Counting objects:  66% (20/30)        
+2026-02-26T07:20:43.5647833Z remote: Counting objects:  70% (21/30)        
+2026-02-26T07:20:43.5649537Z remote: Counting objects:  73% (22/30)        
+2026-02-26T07:20:43.5650718Z remote: Counting objects:  76% (23/30)        
+2026-02-26T07:20:43.5651744Z remote: Counting objects:  80% (24/30)        
+2026-02-26T07:20:43.5652772Z remote: Counting objects:  83% (25/30)        
+2026-02-26T07:20:43.5653871Z remote: Counting objects:  86% (26/30)        
+2026-02-26T07:20:43.5655036Z remote: Counting objects:  90% (27/30)        
+2026-02-26T07:20:43.5656257Z remote: Counting objects:  93% (28/30)        
+2026-02-26T07:20:43.5657646Z remote: Counting objects:  96% (29/30)        
+2026-02-26T07:20:43.5659248Z remote: Counting objects: 100% (30/30)        
+2026-02-26T07:20:43.5660633Z remote: Counting objects: 100% (30/30), done.        
+2026-02-26T07:20:43.5662014Z remote: Compressing objects:   3% (1/27)        
+2026-02-26T07:20:43.5663346Z remote: Compressing objects:   7% (2/27)        
+2026-02-26T07:20:43.5664683Z remote: Compressing objects:  11% (3/27)        
+2026-02-26T07:20:43.5666007Z remote: Compressing objects:  14% (4/27)        
+2026-02-26T07:20:43.5667345Z remote: Compressing objects:  18% (5/27)        
+2026-02-26T07:20:43.5669179Z remote: Compressing objects:  22% (6/27)        
+2026-02-26T07:20:43.5671359Z remote: Compressing objects:  25% (7/27)        
+2026-02-26T07:20:43.5672939Z remote: Compressing objects:  29% (8/27)        
+2026-02-26T07:20:43.5674368Z remote: Compressing objects:  33% (9/27)        
+2026-02-26T07:20:43.5676004Z remote: Compressing objects:  37% (10/27)        
+2026-02-26T07:20:43.5677696Z remote: Compressing objects:  40% (11/27)        
+2026-02-26T07:20:43.5679372Z remote: Compressing objects:  44% (12/27)        
+2026-02-26T07:20:43.5680853Z remote: Compressing objects:  48% (13/27)        
+2026-02-26T07:20:43.5682310Z remote: Compressing objects:  51% (14/27)        
+2026-02-26T07:20:43.5683751Z remote: Compressing objects:  55% (15/27)        
+2026-02-26T07:20:43.5685423Z remote: Compressing objects:  59% (16/27)        
+2026-02-26T07:20:43.5686880Z remote: Compressing objects:  62% (17/27)        
+2026-02-26T07:20:43.5688313Z remote: Compressing objects:  66% (18/27)        
+2026-02-26T07:20:43.5690027Z remote: Compressing objects:  70% (19/27)        
+2026-02-26T07:20:43.5691494Z remote: Compressing objects:  74% (20/27)        
+2026-02-26T07:20:43.5692925Z remote: Compressing objects:  77% (21/27)        
+2026-02-26T07:20:43.5694350Z remote: Compressing objects:  81% (22/27)        
+2026-02-26T07:20:43.5695765Z remote: Compressing objects:  85% (23/27)        
+2026-02-26T07:20:43.5697183Z remote: Compressing objects:  88% (24/27)        
+2026-02-26T07:20:43.5698814Z remote: Compressing objects:  92% (25/27)        
+2026-02-26T07:20:43.5700221Z remote: Compressing objects:  96% (26/27)        
+2026-02-26T07:20:43.5701603Z remote: Compressing objects: 100% (27/27)        
+2026-02-26T07:20:43.5703090Z remote: Compressing objects: 100% (27/27), done.        
+2026-02-26T07:20:43.5775647Z remote: Total 30 (delta 1), reused 30 (delta 1), pack-reused 0 (from 0)        
+2026-02-26T07:20:43.5836573Z From https://github.com/YatharthJangid/go-distributed-job-queue
+2026-02-26T07:20:43.5839473Z  * [new ref]         bfb0775ac6c2dc987c81d2ae82c962db87ac92da -> origin/master
+2026-02-26T07:20:43.5876088Z ##[endgroup]
+2026-02-26T07:20:43.5877791Z ##[group]Determining the checkout info
+2026-02-26T07:20:43.5879712Z ##[endgroup]
+2026-02-26T07:20:43.5881263Z ##[group]Checking out the ref
+2026-02-26T07:20:43.5883011Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+2026-02-26T07:20:43.5947708Z Reset branch 'master'
+2026-02-26T07:20:43.5949678Z branch 'master' set up to track 'origin/master'.
+2026-02-26T07:20:43.5957347Z ##[endgroup]
+2026-02-26T07:20:43.5996011Z [command]/usr/bin/git log -1 --format='%H'
+2026-02-26T07:20:43.6024699Z 'bfb0775ac6c2dc987c81d2ae82c962db87ac92da'
+2026-02-26T07:20:43.6326638Z ##[group]Run actions/setup-go@v4
+2026-02-26T07:20:43.6327624Z with:
+2026-02-26T07:20:43.6328291Z   go-version: 1.21
+2026-02-26T07:20:43.6329220Z   check-latest: false
+2026-02-26T07:20:43.6330508Z   token: ***
+2026-02-26T07:20:43.6331190Z   cache: true
+2026-02-26T07:20:43.6331894Z ##[endgroup]
+2026-02-26T07:20:43.7985629Z Setup go version spec 1.21
+2026-02-26T07:20:43.8497947Z Attempting to download 1.21...
+2026-02-26T07:20:44.2772757Z matching 1.21...
+2026-02-26T07:20:44.2821876Z Acquiring 1.21.13 from https://github.com/actions/go-versions/releases/download/1.21.13-10277905115/go-1.21.13-linux-x64.tar.gz
+2026-02-26T07:20:44.8009549Z Extracting Go...
+2026-02-26T07:20:44.8121613Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/d1b2019d-6225-4f0f-ae74-74b7be82f304 -f /home/runner/work/_temp/b80395a5-6098-4f1b-9b72-904b42e22541
+2026-02-26T07:20:46.3517898Z Successfully extracted go to /home/runner/work/_temp/d1b2019d-6225-4f0f-ae74-74b7be82f304
+2026-02-26T07:20:46.3518968Z Adding to the cache ...
+2026-02-26T07:20:50.8018968Z Successfully cached go to /opt/hostedtoolcache/go/1.21.13/x64
+2026-02-26T07:20:50.8020274Z Added go to the path
+2026-02-26T07:20:50.8022192Z Successfully set up Go version 1.21
+2026-02-26T07:20:55.0532810Z go: downloading go1.24.5 (linux/amd64)
+2026-02-26T07:20:55.0686855Z [command]/opt/hostedtoolcache/go/1.21.13/x64/bin/go env GOMODCACHE
+2026-02-26T07:20:55.0721497Z [command]/opt/hostedtoolcache/go/1.21.13/x64/bin/go env GOCACHE
+2026-02-26T07:20:55.0799815Z /home/runner/go/pkg/mod
+2026-02-26T07:20:55.0820148Z /home/runner/.cache/go-build
+2026-02-26T07:20:55.2169951Z Cache is not found
+2026-02-26T07:20:55.2195547Z go version go1.24.5 linux/amd64
+2026-02-26T07:20:55.2195798Z 
+2026-02-26T07:20:55.2196239Z ##[group]go env
+2026-02-26T07:20:55.3750706Z AR='ar'
+2026-02-26T07:20:55.3751152Z CC='gcc'
+2026-02-26T07:20:55.3751490Z CGO_CFLAGS='-O2 -g'
+2026-02-26T07:20:55.3751813Z CGO_CPPFLAGS=''
+2026-02-26T07:20:55.3752224Z CGO_CXXFLAGS='-O2 -g'
+2026-02-26T07:20:55.3752578Z CGO_ENABLED='1'
+2026-02-26T07:20:55.3752870Z CGO_FFLAGS='-O2 -g'
+2026-02-26T07:20:55.3753168Z CGO_LDFLAGS='-O2 -g'
+2026-02-26T07:20:55.3753481Z CXX='g++'
+2026-02-26T07:20:55.3753804Z GCCGO='gccgo'
+2026-02-26T07:20:55.3754109Z GO111MODULE=''
+2026-02-26T07:20:55.3754422Z GOAMD64='v1'
+2026-02-26T07:20:55.3754716Z GOARCH='amd64'
+2026-02-26T07:20:55.3755025Z GOAUTH='netrc'
+2026-02-26T07:20:55.3755335Z GOBIN=''
+2026-02-26T07:20:55.3755678Z GOCACHE='/home/runner/.cache/go-build'
+2026-02-26T07:20:55.3756084Z GOCACHEPROG=''
+2026-02-26T07:20:55.3756379Z GODEBUG=''
+2026-02-26T07:20:55.3756670Z GOENV='/home/runner/.config/go/env'
+2026-02-26T07:20:55.3757046Z GOEXE=''
+2026-02-26T07:20:55.3757320Z GOEXPERIMENT=''
+2026-02-26T07:20:55.3757623Z GOFIPS140='off'
+2026-02-26T07:20:55.3757892Z GOFLAGS=''
+2026-02-26T07:20:55.3759189Z GOGCCFLAGS='-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build758106597=/tmp/go-build -gno-record-gcc-switches'
+2026-02-26T07:20:55.3760391Z GOHOSTARCH='amd64'
+2026-02-26T07:20:55.3760719Z GOHOSTOS='linux'
+2026-02-26T07:20:55.3761068Z GOINSECURE=''
+2026-02-26T07:20:55.3761670Z GOMOD='/home/runner/work/go-distributed-job-queue/go-distributed-job-queue/go.mod'
+2026-02-26T07:20:55.3762361Z GOMODCACHE='/home/runner/go/pkg/mod'
+2026-02-26T07:20:55.3762734Z GONOPROXY=''
+2026-02-26T07:20:55.3763000Z GONOSUMDB=''
+2026-02-26T07:20:55.3763254Z GOOS='linux'
+2026-02-26T07:20:55.3763533Z GOPATH='/home/runner/go'
+2026-02-26T07:20:55.3763841Z GOPRIVATE=''
+2026-02-26T07:20:55.3764222Z GOPROXY='https://proxy.golang.org,direct'
+2026-02-26T07:20:55.3764910Z GOROOT='/home/runner/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.5.linux-amd64'
+2026-02-26T07:20:55.3765544Z GOSUMDB='sum.golang.org'
+2026-02-26T07:20:55.3765876Z GOTELEMETRY='local'
+2026-02-26T07:20:55.3766248Z GOTELEMETRYDIR='/home/runner/.config/go/telemetry'
+2026-02-26T07:20:55.3766691Z GOTMPDIR=''
+2026-02-26T07:20:55.3766964Z GOTOOLCHAIN='auto'
+2026-02-26T07:20:55.3768141Z GOTOOLDIR='/home/runner/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.5.linux-amd64/pkg/tool/linux_amd64'
+2026-02-26T07:20:55.3769160Z GOVCS=''
+2026-02-26T07:20:55.3769440Z GOVERSION='go1.24.5'
+2026-02-26T07:20:55.3770097Z GOWORK=''
+2026-02-26T07:20:55.3770405Z PKG_CONFIG='pkg-config'
+2026-02-26T07:20:55.3770629Z 
+2026-02-26T07:20:55.3771176Z ##[endgroup]
+2026-02-26T07:20:55.3951216Z ##[group]Run go mod download
+2026-02-26T07:20:55.3951587Z [36;1mgo mod download[0m
+2026-02-26T07:20:55.4008127Z shell: /usr/bin/bash -e {0}
+2026-02-26T07:20:55.4008415Z ##[endgroup]
+2026-02-26T07:20:55.4827516Z ##[group]Run cd lib_optimized && go test -v -cover
+2026-02-26T07:20:55.4828003Z [36;1mcd lib_optimized && go test -v -cover[0m
+2026-02-26T07:20:55.4880256Z shell: /usr/bin/bash -e {0}
+2026-02-26T07:20:55.4880536Z ##[endgroup]
+2026-02-26T07:21:07.3818888Z === RUN   TestInitConfig_Valid
+2026-02-26T07:21:07.3822137Z --- PASS: TestInitConfig_Valid (0.00s)
+2026-02-26T07:21:07.3822579Z === RUN   TestInitConfig_MissingFile
+2026-02-26T07:21:07.3823029Z --- PASS: TestInitConfig_MissingFile (0.00s)
+2026-02-26T07:21:07.3825667Z === RUN   TestInitConfig_InvalidJSON
+2026-02-26T07:21:07.3827521Z --- PASS: TestInitConfig_InvalidJSON (0.00s)
+2026-02-26T07:21:07.3828439Z === RUN   TestInitConfig_MissingRedisSection
+2026-02-26T07:21:07.3832370Z --- PASS: TestInitConfig_MissingRedisSection (0.00s)
+2026-02-26T07:21:07.3833168Z === RUN   TestInitConfig_PartialDefaults
+2026-02-26T07:21:07.3835042Z --- PASS: TestInitConfig_PartialDefaults (0.00s)
+2026-02-26T07:21:07.3835660Z === RUN   TestEnqueueAndInfoCounts
+2026-02-26T07:21:07.3849419Z     gores_test.go:41: enqueue: dial tcp [::1]:6379: connect: connection refused
+2026-02-26T07:21:07.3850551Z --- FAIL: TestEnqueueAndInfoCounts (0.00s)
+2026-02-26T07:21:07.3851102Z === RUN   TestEnqueueBatch100
+2026-02-26T07:21:07.3857572Z     gores_test.go:75: batch: dial tcp [::1]:6379: connect: connection refused
+2026-02-26T07:21:07.3858429Z --- FAIL: TestEnqueueBatch100 (0.00s)
+2026-02-26T07:21:07.3859047Z === RUN   TestMsgpackRoundTrip
+2026-02-26T07:21:07.3859654Z --- PASS: TestMsgpackRoundTrip (0.00s)
+2026-02-26T07:21:07.3860138Z === RUN   TestPoolReuseClearsFields
+2026-02-26T07:21:07.3860631Z --- PASS: TestPoolReuseClearsFields (0.00s)
+2026-02-26T07:21:07.3861079Z === RUN   TestJobValidateErrors
+2026-02-26T07:21:07.3861330Z --- PASS: TestJobValidateErrors (0.00s)
+2026-02-26T07:21:07.3861602Z === RUN   TestFromBytesInvalidData
+2026-02-26T07:21:07.3861877Z --- PASS: TestFromBytesInvalidData (0.00s)
+2026-02-26T07:21:07.3862154Z === RUN   TestProcessJobSuccess
+2026-02-26T07:21:07.3862406Z --- PASS: TestProcessJobSuccess (0.00s)
+2026-02-26T07:21:07.3862706Z === RUN   TestProcessJobRetryEventuallySucceeds
+2026-02-26T07:21:10.3872344Z --- PASS: TestProcessJobRetryEventuallySucceeds (3.00s)
+2026-02-26T07:21:10.3873156Z === RUN   TestProcessJobErrorPaths
+2026-02-26T07:21:17.3915903Z --- PASS: TestProcessJobErrorPaths (7.00s)
+2026-02-26T07:21:17.3916640Z === RUN   TestProcessJob_TaskNotFound
+2026-02-26T07:21:17.3917259Z --- PASS: TestProcessJob_TaskNotFound (0.00s)
+2026-02-26T07:21:17.3917852Z === RUN   TestProcessJob_NilArgs
+2026-02-26T07:21:17.3918407Z     worker_test.go:151: handled nil args successfully
+2026-02-26T07:21:17.3919419Z --- PASS: TestProcessJob_NilArgs (0.00s)
+2026-02-26T07:21:17.3920016Z === RUN   TestProcessJob_EmptyPayload
+2026-02-26T07:21:17.3920675Z --- PASS: TestProcessJob_EmptyPayload (0.00s)
+2026-02-26T07:21:17.3921224Z FAIL
+2026-02-26T07:21:17.3927473Z coverage: 67.5% of statements
+2026-02-26T07:21:17.3935316Z exit status 1
+2026-02-26T07:21:17.3935971Z FAIL	myproject/gores/lib_optimized	10.014s
+2026-02-26T07:21:17.4475815Z ##[error]Process completed with exit code 1.
+2026-02-26T07:21:17.4580165Z Post job cleanup.
+2026-02-26T07:21:17.5326241Z [command]/usr/bin/git version
+2026-02-26T07:21:17.5362557Z git version 2.53.0
+2026-02-26T07:21:17.5405377Z Temporarily overriding HOME='/home/runner/work/_temp/141145a2-3d4c-4397-9750-dee69180a2b1' before making global git config changes
+2026-02-26T07:21:17.5406686Z Adding repository directory to the temporary git global config as a safe directory
+2026-02-26T07:21:17.5409540Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/go-distributed-job-queue/go-distributed-job-queue
+2026-02-26T07:21:17.5441513Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-02-26T07:21:17.5471412Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-02-26T07:21:17.5705771Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-02-26T07:21:17.5725414Z http.https://github.com/.extraheader
+2026-02-26T07:21:17.5738059Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-02-26T07:21:17.5768367Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-02-26T07:21:17.6117031Z Cleaning up orphan processes
