@@ -41,11 +41,12 @@ func (j *Job) ToBytes() ([]byte, error) {
 }
 
 func FromBytes(data []byte) (*Job, error) {
-	var j Job
-	if err := msgpack.Unmarshal(data, &j); err != nil {
+	j := GetJob()
+	if err := msgpack.Unmarshal(data, j); err != nil {
+		PutJob(j)
 		return nil, fmt.Errorf("msgpack: %w", err)
 	}
-	return &j, nil
+	return j, nil
 }
 
 func (j *Job) Validate() error {
