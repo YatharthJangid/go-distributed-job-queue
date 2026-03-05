@@ -10,7 +10,10 @@ A high-throughput, distributed job queue system written in Go, designed for low-
 
 ## Key Architectural Features
 - **Worker-Pool Pattern:** Efficiently manages goroutine lifecycles to prevent resource exhaustion.
-- **Object Pooling:** Utilizes `sync.Pool` for zero-allocation task recycling, significantly reducing GC overhead.
+- **Object Pooling:** Utilizes `sync.Pool` for zero-allocation task recycling, significantly reducing GC heap allocations.
+- **Reliable Queues & DLQ:** Implements the `BRPOPLPUSH` pattern to prevent orphaned jobs, moving failed tasks to a Dead-Letter Queue after exhausting retries.
+- **Graceful Shutdown:** Intercepts OS termination signals (`SIGINT`, `SIGTERM`) to allow active workers to complete in-flight jobs before safely exiting.
+- **Optimized Redis Connections:** Long-lived, dedicated connection structures per worker with automatic backoff-and-retry, reducing mutex lock contention and connection churn.
 - **CI/CD Integrated:** Automated testing pipeline via GitHub Actions ensuring code quality on every push.
 - **Observability:** Built-in benchmarking and coverage reporting for performance bottlenecks.
 
