@@ -17,12 +17,26 @@ Railway can run a Go binary + a managed Redis instance with almost no config.
 5. Railway injects `REDIS_URL` automatically. Update `config.go` to read it:
 
 ```go
-// In config.go, add an env-var override in InitConfig():
-import "os"
-
-if url := os.Getenv("REDIS_URL"); url != "" {
-    // parse url and set cfg.Redis.Host / Port
+// In config.go, add a URL field to the Config struct:
+type Config struct {
+    Redis struct {
+        // ...
+        URL string `json:"url"`
+    } `json:"redis"`
 }
+
+// In InitConfig(), read the env var:
+if url := os.Getenv("REDIS_URL"); url != "" {
+    cfg.Redis.URL = url
+}
+
+// In gores.go's NewGores(), use redis.DialURL:
+Dial: func() (redis.Conn, error) {
+    if config.Redis.URL != "" {
+        return redis.DialURL(config.Redis.URL)
+    }
+    return redis.Dial("tcp", fmt.Sprintf("%s:%d", config.Redis.Host, config.Redis.Port))
+},
 ```
 
 6. Set the **start command** in Railway settings:

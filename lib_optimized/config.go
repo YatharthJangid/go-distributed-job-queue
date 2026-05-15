@@ -3,12 +3,14 @@ package lib
 import (
 	"encoding/json"
 	"io/ioutil"
+	"os"
 )
 
 type Config struct {
 	Redis struct {
 		Host        string `json:"host"`
 		Port        int    `json:"port"`
+		URL         string `json:"url"`
 		DB          int    `json:"db"`
 		PoolSize    int    `json:"pool_size"`
 		MaxIdle     int    `json:"max_idle"`
@@ -18,14 +20,24 @@ type Config struct {
 }
 
 func InitConfig(path string) (*Config, error) {
-	data, err := ioutil.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
 	var cfg Config
-	if err := json.Unmarshal(data, &cfg); err != nil {
+
+	// Try reading from file first
+	data, err := ioutil.ReadFile(path)
+	if err == nil {
+		if err := json.Unmarshal(data, &cfg); err != nil {
+			return nil, err
+		}
+	} else if os.Getenv("REDIS_URL") == "" {
+		// Only fail if file is missing AND there is no REDIS_URL
 		return nil, err
 	}
+
+	// Override with environment variable if present
+	if url := os.Getenv("REDIS_URL"); url != "" {
+		cfg.Redis.URL = url
+	}
+
 	if cfg.Redis.PoolSize == 0 {
 		cfg.Redis.PoolSize = 10
 	}

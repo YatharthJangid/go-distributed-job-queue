@@ -27,6 +27,9 @@ func NewGores(config *Config) *Gores {
 		MaxActive:   config.Redis.MaxActive,
 		IdleTimeout: time.Duration(config.Redis.IdleTimeout) * time.Second,
 		Dial: func() (redis.Conn, error) {
+			if config.Redis.URL != "" {
+				return redis.DialURL(config.Redis.URL)
+			}
 			return redis.Dial("tcp", fmt.Sprintf("%s:%d", config.Redis.Host, config.Redis.Port))
 		},
 	}
