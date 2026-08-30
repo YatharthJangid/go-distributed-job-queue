@@ -24,22 +24,32 @@ var tasks = map[string]func(map[string]interface{}) error{
 	},
 }
 
-func runProducer(g *gores.Gores) {
-	fmt.Println("🚀 Produce: Batch enqueue...")
-	batch := make([]map[string]interface{}, 100)
-	for i := 0; i < 100; i++ {
-		batch[i] = map[string]interface{}{
+func runProducer(g *gores.Gores, count int, useIdemp bool) {
+	fmt.Printf("🚀 Produce: Batch enqueue (%d jobs, idempotency: %v)...\n", count, useIdemp)
+	batch := make([]map[string]interface{}, count)
+	for i := 0; i < count; i++ {
+		job := map[string]interface{}{
 			"Name":  "PrintJob",
 			"Queue": "demo_queue",
 			"Args":  map[string]interface{}{"id": float64(i)},
 			"Retry": true,
 		}
+		if useIdemp {
+			job["IdempotencyKey"] = fmt.Sprintf("job-idemp-%d", i)
+			job["IdempotencyTTL"] = 300
+		}
+		batch[i] = job
 	}
 	start := time.Now()
 	if err := g.EnqueueBatch(batch); err != nil {
 		log.Fatalf("Enqueue: %v", err)
 	}
-	fmt.Printf("📤 100 jobs in %v (%.0f jobs/sec)\n", time.Since(start), 100/time.Since(start).Seconds())
+	duration := time.Since(start)
+	jobsPerSec := float64(count) / duration.Seconds()
+	if duration.Seconds() == 0 {
+		jobsPerSec = float64(count)
+	}
+	fmt.Printf("📤 %d jobs in %v (%.0f jobs/sec)\n", count, duration, jobsPerSec)
 
 	info, _ := g.Info()
 	data, _ := json.MarshalIndent(info, "", "  ")
@@ -55,10 +65,12 @@ func main() {
 	configPath := flag.String("c", "config.json", "config")
 	mode := flag.String("o", "produce", "produce/consume")
 	numWorkers := flag.Int("w", 3, "workers")
-	bench := flag.Bool("bench", false, "run benchmarks only") // ADD THIS
+	jobCount := flag.Int("n", 100, "number of jobs to produce")
+	useIdemp := flag.Bool("idemp", false, "enable idempotency keys on produced jobs")
+	bench := flag.Bool("bench", false, "run benchmarks only")
 	flag.Parse()
 
-	if *bench { // ADD THIS BLOCK
+	if *bench {
 		gores.RunLiveBenchmark()
 		return
 	}
@@ -73,7 +85,7 @@ func main() {
 
 	switch *mode {
 	case "produce":
-		runProducer(g)
+		runProducer(g, *jobCount, *useIdemp)
 	case "consume":
 		runConsumer(g, *numWorkers)
 	default:

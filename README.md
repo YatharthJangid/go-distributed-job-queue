@@ -19,8 +19,8 @@
 ```
 ┌──────────────────────────────────────────────────────┐
 │                    Producer (main.go)                │
-│  EnqueueBatch() → Redis MULTI/EXEC pipeline          │
-│  Lua script: atomic LPUSH + INCR stat counter        │
+│  EnqueueBatch() → Redis Lua batch script              │
+│  LPUSH + counters + optional SET NX EX deduplication  │
 └──────────────────────┬───────────────────────────────┘
                        │ gores:<queue>:pending  (Redis List)
                        ▼
@@ -43,10 +43,11 @@
 
 | Component | Implementation | Why |
 |---|---|---|
+| **Idempotency & Deduplication** | Enqueue `SET NX EX` + execution status keys | Suppresses duplicate enqueue and completed delivery |
 | **Job serialization** | MessagePack (`msgpack/v5`) | ~3× smaller than JSON, faster encode/decode |
 | **Job pooling** | `sync.Pool` | Zero GC pressure on hot path |
 | **Enqueue atomicity** | Lua script (`EVAL`) | Stat counter + LPUSH in one round-trip |
-| **Batch enqueue** | Redis `MULTI/EXEC` pipeline | Single TCP round-trip for N jobs |
+| **Batch enqueue** | Redis Lua / pipeline | Single TCP round-trip for N jobs with atomic deduplication |
 | **Reliable dequeue** | `BRPOPLPUSH` | Jobs survive worker crashes; never lost |
 | **Dead-Letter Queue** | `gores:<queue>_deadletter` | Failed jobs after 3 retries are preserved |
 | **Worker isolation** | `runtime.LockOSThread()` | Per-worker dedicated OS thread + Redis connection |
@@ -61,15 +62,23 @@
 gores/
 ├── main.go                  # CLI entry-point (produce / consume / bench modes)
 ├── config.json              # Redis connection config
+├── Dockerfile               # Production multi-stage Docker build
+├── k8s/                     # Kubernetes manifests (Multi-node / Cloud)
+│   ├── kind-config.yaml     # Local multi-node cluster configuration
+│   ├── redis.yaml           # Redis Deployment & Service
+│   ├── configmap.yaml       # Redis ConfigMap
+│   ├── consumer-deployment.yaml # Scalable Consumer Deployment
+│   ├── producer-job.yaml    # Batch Producer Job
+│   └── producer-duplicate-job.yaml # Idempotency verification Job
 ├── go.mod / go.sum
 └── pkg/gores/
-    ├── constants.go         # Redis key prefixes & suffixes
-    ├── config.go            # Config struct + JSON loader
+    ├── constants.go         # Redis key prefixes, stats & idempotency TTL
+    ├── config.go            # Config struct + JSON/ENV loader
     ├── job.go               # Job struct, sync.Pool, msgpack encode/decode
-    ├── gores.go             # Core: Enqueue, EnqueueBatch, Info (Lua + MULTI/EXEC)
-    ├── worker.go            # Worker pool: BRPOPLPUSH loop, retry, DLQ
-    ├── live_bench.go        # End-to-end throughput benchmark (--bench flag)
-    └── *_test.go            # Unit + benchmark tests (77.3% coverage)
+    ├── gores.go             # Core: enqueue, batch Lua scripts, stats & job status
+    ├── worker.go            # Worker pool: BRPOPLPUSH loop, retry, DLQ, idempotency lock
+    ├── live_bench.go        # End-to-end throughput benchmark (-bench flag)
+    └── *_test.go            # Unit, benchmark & idempotency tests
 ```
 
 ---
@@ -100,6 +109,9 @@ go build -o gores .
 # Enqueue 100 jobs (producer mode)
 ./gores -o produce
 
+# Enqueue with idempotency keys (5-minute deduplication window)
+./gores -o produce -n 100 -idemp
+
 # Start 5 worker goroutines (consumer mode)
 ./gores -o consume -w 5
 
@@ -114,7 +126,9 @@ go build -o gores .
 | `-o` | `produce` | Mode: `produce` or `consume` |
 | `-w` | `3` | Number of worker goroutines |
 | `-c` | `config.json` | Path to Redis config file |
-| `--bench` | `false` | Run live throughput benchmark and exit |
+| `-n` | `100` | Number of jobs to produce |
+| `-idemp` | `false` | Add idempotency keys to produced jobs |
+| `-bench` | `false` | Run live throughput benchmark and exit |
 
 ### Config (`config.json`)
 
@@ -139,15 +153,21 @@ go build -o gores .
 ```
 Enqueue (producer)
   → msgpack serialize
-  → Lua: LPUSH gores:<queue>:pending + INCR gores:stat:enqueued
+  → Lua: LPUSH + INCR, or SET NX EX + LPUSH for idempotent jobs
 
 Dequeue (worker)
   → BRPOPLPUSH :pending → :processing   (atomic, no job loss)
+  → optional GET/SET gores:exec:<key> execution status
   → processJob(): dispatch to task fn
   → on success: LREM :processing
+  → on success: mark completed + INCR gores:stat:processed
   → on failure: retry up to 3× with exponential backoff
   → max retries exceeded: LPUSH gores:<queue>_deadletter
 ```
+
+For an idempotent job, `gores:idempotency:<key>` records the enqueue state and
+`gores:exec:<key>` records processing/completed state. `IdempotencyTTL` controls
+both key lifetimes; it defaults to one hour when an idempotency key is set.
 
 ---
 
@@ -174,6 +194,7 @@ See **[DEPLOYMENT.md](DEPLOYMENT.md)** for a full guide covering:
 - Railway / Render (free-tier, one-click deploy)
 - AWS EC2 + ElastiCache (production)
 - Environment-variable-based config for cloud Redis
+- Kubernetes manifests for a local kind cluster or multi-node deployment
 
 ---
 
@@ -182,7 +203,7 @@ See **[DEPLOYMENT.md](DEPLOYMENT.md)** for a full guide covering:
 See **[DEMO.md](DEMO.md)** for:
 - Running producer + consumer in split terminals with real-time output
 - Using `redis-cli MONITOR` to watch jobs flow live
-- The `--bench` flag for measurable throughput numbers
+- The `-bench` flag for measurable throughput numbers
 - A `docker-compose` setup that spins up Redis + producer + consumer automatically
 
 ---

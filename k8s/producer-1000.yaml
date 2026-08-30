@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gores-producer-1000
+  labels:
+    app: gores-producer-1000
+spec:
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        app: gores-producer-1000
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: producer
+        image: gores:latest
+        imagePullPolicy: Never
+        command: ["./gores", "-o", "produce", "-n", "1000", "-idemp"]
+        env:
+        - name: REDIS_URL
+          value: "redis://redis:6379"

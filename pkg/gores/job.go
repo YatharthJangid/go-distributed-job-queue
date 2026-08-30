@@ -8,13 +8,15 @@ import (
 )
 
 type Job struct {
-	ID          string                 `msgpack:"id"`
-	Name        string                 `msgpack:"name"`
-	Queue       string                 `msgpack:"queue"`
-	Args        map[string]interface{} `msgpack:"args"`
-	Retry       bool                   `msgpack:"retry"`
-	RetryCount  int                    `msgpack:"retry_count"`
-	EnqueueTime float64                `msgpack:"enqueue_time"`
+	ID             string                 `msgpack:"id"`
+	IdempotencyKey string                 `msgpack:"idempotency_key,omitempty"`
+	IdempotencyTTL int                    `msgpack:"idempotency_ttl,omitempty"`
+	Name           string                 `msgpack:"name"`
+	Queue          string                 `msgpack:"queue"`
+	Args           map[string]interface{} `msgpack:"args"`
+	Retry          bool                   `msgpack:"retry"`
+	RetryCount     int                    `msgpack:"retry_count"`
+	EnqueueTime    float64                `msgpack:"enqueue_time"`
 }
 
 var jobPool = sync.Pool{
@@ -28,11 +30,13 @@ func GetJob() *Job {
 }
 
 func PutJob(j *Job) {
-	j.ID, j.Name, j.Queue = "", "", ""
+	j.ID, j.IdempotencyKey, j.Name, j.Queue = "", "", "", ""
+	j.IdempotencyTTL = 0
 	for k := range j.Args {
 		delete(j.Args, k)
 	}
 	j.Retry, j.RetryCount = false, 0
+	j.EnqueueTime = 0
 	jobPool.Put(j)
 }
 

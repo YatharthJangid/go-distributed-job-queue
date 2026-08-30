@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gores-consumer
+  labels:
+    app: gores-consumer
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: gores-consumer
+  template:
+    metadata:
+      labels:
+        app: gores-consumer
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: consumer
+        image: gores:latest
+        imagePullPolicy: Never
+        command: ["./gores", "-o", "consume", "-w", "3"]
+        env:
+        - name: REDIS_URL
+          value: "redis://redis:6379"
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "128Mi"
+          requests:
+            cpu: "100m"
+            memory: "32Mi"

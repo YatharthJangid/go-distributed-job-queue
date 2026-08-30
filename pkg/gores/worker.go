@@ -11,6 +11,8 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/garyburd/redigo/redis"
 )
 
 func (g *Gores) StartWorkers(n int, tasks map[string]func(map[string]interface{}) error) {
@@ -76,6 +78,25 @@ func (g *Gores) processJob(data []byte, tasks map[string]func(map[string]interfa
 	}
 	defer PutJob(job)
 
+	// Idempotency check before execution
+	if job.IdempotencyKey != "" {
+		conn := g.pool.Get()
+		execKey := g.prefix + EXEC_PREFIX + job.IdempotencyKey
+		ttl := job.IdempotencyTTL
+		if ttl <= 0 {
+			ttl = DEFAULT_IDEMPOTENCY_TTL
+		}
+
+		status, err := redis.String(conn.Do("GET", execKey))
+		if err == nil && status == "completed" {
+			conn.Close()
+			return nil // Duplicate delivery, already executed
+		}
+
+		_, _ = conn.Do("SET", execKey, "processing", "EX", ttl)
+		conn.Close()
+	}
+
 	fn, ok := tasks[job.Name]
 	if !ok {
 		return fmt.Errorf("task %s not found", job.Name)
@@ -83,6 +104,18 @@ func (g *Gores) processJob(data []byte, tasks map[string]func(map[string]interfa
 
 	for r := 0; r < 3; r++ {
 		if err := fn(job.Args); err == nil {
+			conn := g.pool.Get()
+			defer conn.Close()
+
+			if job.IdempotencyKey != "" {
+				execKey := g.prefix + EXEC_PREFIX + job.IdempotencyKey
+				ttl := job.IdempotencyTTL
+				if ttl <= 0 {
+					ttl = DEFAULT_IDEMPOTENCY_TTL
+				}
+				_, _ = conn.Do("SET", execKey, "completed", "EX", ttl)
+			}
+			_, _ = conn.Do("INCR", g.prefix+STAT_PROCESSED)
 			return nil
 		}
 		time.Sleep(time.Duration(math.Pow(2, float64(r))) * time.Second)

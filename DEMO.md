@@ -24,7 +24,7 @@ You'll see:
 ```
 You'll see:
 ```
-🚀 Produce: Batch enqueue...
+🚀 Produce: Batch enqueue (100 jobs, idempotency: false)...
 📤 100 jobs in 1.2ms (83333 jobs/sec)
 
 📊 Stats:
@@ -57,14 +57,15 @@ redis-cli MONITOR
 
 Now run the producer. You'll see the raw Redis commands live:
 ```
-1715691127.123 [0 127.0.0.1:54321] "MULTI"
-1715691127.124 [0 127.0.0.1:54321] "LPUSH" "gores:demo_queue:pending" "\x82\xa4name..."
+1715691127.123 [0 127.0.0.1:54321] "EVALSHA" "..." "2" "gores:demo_queue:pending" "gores:stat:enqueued"
+1715691127.124 [0 127.0.0.1:54321] "EVALSHA" "..." "2" "gores:demo_queue:pending" "gores:stat:enqueued"
 ...
 1715691127.190 [0 127.0.0.1:54322] "BRPOPLPUSH" "gores:demo_queue:pending" "gores:demo_queue:processing" "1"
 1715691127.191 [0 127.0.0.1:54322] "LREM" "gores:demo_queue:processing" "1" "..."
 ```
 
-This visually shows `BRPOPLPUSH` atomically moving jobs from `:pending` → `:processing` → removed on success. That's the reliability guarantee.
+This shows the Lua enqueue script and `BRPOPLPUSH` moving jobs from `:pending`
+→ `:processing` → removed on success. That's the reliability guarantee.
 
 ---
 
@@ -155,3 +156,16 @@ Then walk through:
 2. **Demo 1** (parallel workers — concurrency is visible)
 3. **Demo 2** (MONITOR — shows the reliability pattern at the Redis level)
 4. **Demo 5** (DLQ — shows nothing is lost)
+
+## Demo 7 — Idempotent Enqueue
+
+Use the same idempotency keys on repeated producer runs:
+
+```bash
+./gores -o produce -n 100 -idemp
+./gores -o produce -n 100 -idemp
+```
+
+The first run enqueues the jobs; the second increments
+`gores:stat:duplicates` without adding duplicate queue entries. Keys expire
+after the configured TTL (the CLI demo uses five minutes).
