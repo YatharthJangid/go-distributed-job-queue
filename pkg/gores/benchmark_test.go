@@ -1,4 +1,4 @@
-package lib
+package gores
 
 import (
 	"fmt"
@@ -247,5 +247,5 @@ func RunBenchmarks() {
 	fmt.Printf("BenchmarkJobFromBytes-8\t%d\t%d ns/op\t~512 B/op\t~8 allocs/op\n", iterations, nsPerOp)
 
 	fmt.Println()
-	fmt.Println("Run 'go test -bench=. -benchmem ./lib_optimized' for detailed Redis benchmarks")
+	fmt.Println("Run 'go test -bench=. -benchmem ./pkg/gores' for detailed Redis benchmarks")
 }

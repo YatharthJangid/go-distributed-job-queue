@@ -133,8 +133,7 @@ redis-cli LRANGE gores:demo_queue_deadletter 0 -1
 ## Demo 6 — Go Unit Benchmarks (No Redis Needed)
 
 ```bash
-cd lib_optimized
-go test -bench=. -benchmem ./...
+go test -bench=. -benchmem ./pkg/gores/...
 ```
 
 Sample output:

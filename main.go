@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	lib "myproject/gores/lib_optimized"
+	"myproject/gores/pkg/gores"
 )
 
 var tasks = map[string]func(map[string]interface{}) error{
@@ -24,7 +24,7 @@ var tasks = map[string]func(map[string]interface{}) error{
 	},
 }
 
-func runProducer(g *lib.Gores) {
+func runProducer(g *gores.Gores) {
 	fmt.Println("🚀 Produce: Batch enqueue...")
 	batch := make([]map[string]interface{}, 100)
 	for i := 0; i < 100; i++ {
@@ -46,7 +46,7 @@ func runProducer(g *lib.Gores) {
 	fmt.Printf("\n📊 Stats:\n%s\n", data)
 }
 
-func runConsumer(g *lib.Gores, numWorkers int) {
+func runConsumer(g *gores.Gores, numWorkers int) {
 	fmt.Println("🚀 Consume: Starting", numWorkers, "workers...")
 	g.StartWorkers(numWorkers, tasks)
 }
@@ -59,16 +59,16 @@ func main() {
 	flag.Parse()
 
 	if *bench { // ADD THIS BLOCK
-		lib.RunLiveBenchmark()
+		gores.RunLiveBenchmark()
 		return
 	}
 
-	config, err := lib.InitConfig(*configPath)
+	config, err := gores.InitConfig(*configPath)
 	if err != nil {
 		log.Fatalf("Config: %v", err)
 	}
 
-	g := lib.NewGores(config)
+	g := gores.NewGores(config)
 	defer g.Close()
 
 	switch *mode {

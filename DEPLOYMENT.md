@@ -120,7 +120,7 @@ services:
 
 ### Environment-variable config override (needed for containers)
 
-Add this to `InitConfig()` in `lib_optimized/config.go`:
+Add this to `InitConfig()` in `pkg/gores/config.go`:
 
 ```go
 import "os"

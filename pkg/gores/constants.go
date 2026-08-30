@@ -1,4 +1,4 @@
-package lib
+package gores
 
 const (
 	PREFIX         = "gores:"

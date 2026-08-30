@@ -62,7 +62,7 @@ gores/
 ├── main.go                  # CLI entry-point (produce / consume / bench modes)
 ├── config.json              # Redis connection config
 ├── go.mod / go.sum
-└── lib_optimized/
+└── pkg/gores/
     ├── constants.go         # Redis key prefixes & suffixes
     ├── config.go            # Config struct + JSON loader
     ├── job.go               # Job struct, sync.Pool, msgpack encode/decode
@@ -98,12 +98,12 @@ go build -o gores .
 
 ```bash
 # Enqueue 100 jobs (producer mode)
-./gores -o produce -c config.json
+./gores -o produce
 
-# Consume jobs with 5 workers (run in a second terminal)
-./gores -o consume -w 5 -c config.json
+# Start 5 worker goroutines (consumer mode)
+./gores -o consume -w 5
 
-# Run the live throughput benchmark (requires Redis)
+# Run end-to-end live benchmark (10,000 jobs through Redis)
 ./gores -bench
 ```
 
@@ -154,17 +154,15 @@ Dequeue (worker)
 ## Running Tests
 
 ```bash
-cd lib_optimized
-
 # Unit tests
-go test -v ./...
+go test -v ./pkg/gores/...
 
 # With coverage
-go test -coverprofile=coverage.out ./...
+go test -coverprofile=coverage.out ./pkg/gores/...
 go tool cover -html=coverage.out
 
 # Benchmark tests (Go microbenchmarks — no Redis needed)
-go test -bench=. -benchmem ./...
+go test -bench=. -benchmem ./pkg/gores/...
 ```
 
 ---

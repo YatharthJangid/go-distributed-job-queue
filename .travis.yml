@@ -6,6 +6,6 @@ services:
 env:
   - REDISURL=127.0.0.1:6379
 before_script:
-  - cd lib_optimized
+  - cd pkg/gores
 script:
   - go test -v -cover
