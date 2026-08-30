@@ -1,16 +1,16 @@
 # Graph Report - gores  (2026-08-30)
 
 ## Corpus Check
-- 21 files · ~13,855 words
+- 19 files · ~10,645 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 173 nodes · 253 edges · 14 communities (13 shown, 1 thin omitted)
-- Extraction: 79% EXTRACTED · 21% INFERRED · 0% AMBIGUOUS · INFERRED: 54 edges (avg confidence: 0.8)
+- 131 nodes · 213 edges · 13 communities (12 shown, 1 thin omitted)
+- Extraction: 75% EXTRACTED · 25% INFERRED · 0% AMBIGUOUS · INFERRED: 54 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `88d83539`
+- Built from commit: `07682149`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -26,60 +26,59 @@
 - myproject/gores
 - How to Demo This Project
 - Cloud Deployment Guide
-- AGENTS.md — Developer & AI Agent Guide for GoRes
 
 ## God Nodes (most connected - your core abstractions)
 1. `NewGores()` - 21 edges
 2. `newTestConfig()` - 13 edges
 3. `PutJob()` - 11 edges
 4. `GoRes — High-Performance Distributed Job Queue` - 11 edges
-5. `AGENTS.md — Developer & AI Agent Guide for GoRes` - 10 edges
-6. `AGENTS.md — Developer & AI Agent Guide for GoRes` - 10 edges
-7. `InitConfig()` - 9 edges
-8. `GetJob()` - 9 edges
-9. `FromBytes()` - 9 edges
-10. `How to Demo This Project` - 9 edges
+5. `InitConfig()` - 9 edges
+6. `GetJob()` - 9 edges
+7. `FromBytes()` - 9 edges
+8. `How to Demo This Project` - 9 edges
+9. `Gores` - 8 edges
+10. `Job` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `main()` --calls--> `NewGores()`  [INFERRED]
-  main.go → pkg/gores/gores.go
 - `main()` --calls--> `InitConfig()`  [INFERRED]
   main.go → pkg/gores/config.go
+- `main()` --calls--> `NewGores()`  [INFERRED]
+  main.go → pkg/gores/gores.go
 - `main()` --calls--> `RunLiveBenchmark()`  [INFERRED]
   main.go → pkg/gores/live_bench.go
-- `BenchmarkJobPool()` --calls--> `GetJob()`  [INFERRED]
+- `BenchmarkJobFromBytes()` --calls--> `FromBytes()`  [INFERRED]
   pkg/gores/benchmark_test.go → pkg/gores/job.go
-- `BenchmarkJobPool()` --calls--> `PutJob()`  [INFERRED]
-  pkg/gores/benchmark_test.go → pkg/gores/job.go
+- `RunLiveBenchmark()` --calls--> `InitConfig()`  [INFERRED]
+  pkg/gores/live_bench.go → pkg/gores/config.go
 
 ## Import Cycles
 - None detected.
 
-## Communities (14 total, 1 thin omitted)
+## Communities (13 total, 1 thin omitted)
 
 ### Community 0 - "PutJob"
-Cohesion: 0.23
-Nodes (11): Job, RunBenchmarks(), FromBytes(), GetJob(), PutJob(), T, TestFromBytesInvalidData(), TestJobValidateErrors() (+3 more)
+Cohesion: 0.20
+Nodes (13): Job, BenchmarkJobPool(), BenchmarkJobPoolNoWrite(), RunBenchmarks(), FromBytes(), GetJob(), PutJob(), T (+5 more)
 
 ### Community 1 - "InitConfig"
-Cohesion: 0.21
-Nodes (13): Gores, Config, main(), runConsumer(), runProducer(), InitConfig(), T, TestInitConfig_InvalidJSON() (+5 more)
+Cohesion: 0.40
+Nodes (8): Config, InitConfig(), T, TestInitConfig_InvalidJSON(), TestInitConfig_MissingFile(), TestInitConfig_MissingRedisSection(), TestInitConfig_PartialDefaults(), TestInitConfig_Valid()
 
 ### Community 2 - "NewGores"
-Cohesion: 0.33
-Nodes (10): B, BenchmarkEnqueue(), BenchmarkEnqueueBatch10(), BenchmarkEnqueueBatch100(), BenchmarkInfo(), BenchmarkJobFromBytes(), BenchmarkJobPool(), BenchmarkJobPoolNoWrite() (+2 more)
+Cohesion: 0.27
+Nodes (13): B, BenchmarkEnqueue(), BenchmarkEnqueueBatch10(), BenchmarkEnqueueBatch100(), BenchmarkInfo(), BenchmarkJobFromBytes(), BenchmarkJobToBytes(), BenchmarkProcessJob() (+5 more)
 
 ### Community 3 - "newTestConfig"
-Cohesion: 0.26
-Nodes (16): NewGores(), T, newTestConfig(), TestEnqueueAndInfoCounts(), TestEnqueueBatch100(), T, TestEnqueue_Idempotency(), TestEnqueueBatch_Idempotency() (+8 more)
+Cohesion: 0.32
+Nodes (11): T, newTestConfig(), TestEnqueueAndInfoCounts(), TestEnqueueBatch100(), T, TestProcessJob_EmptyPayload(), TestProcessJob_NilArgs(), TestProcessJob_TaskNotFound() (+3 more)
 
 ### Community 4 - "Gores"
 Cohesion: 0.39
 Nodes (3): Gores, jobFromMap(), Pool
 
 ### Community 5 - "main"
-Cohesion: 0.10
-Nodes (20): 1. Job Serialization & Memory Management ([`pkg/gores/job.go`](file:///home/jangi/projects/gores/pkg/gores/job.go)), 1. Project Overview & Mission, 2. Redis Client & Atomicity ([`pkg/gores/gores.go`](file:///home/jangi/projects/gores/pkg/gores/gores.go)), 2. Repository Structure & Layout, 3. Core Architecture & Key Design Decisions, 3. Worker Pool & Fault Tolerance ([`pkg/gores/worker.go`](file:///home/jangi/projects/gores/pkg/gores/worker.go)), 4. Idempotency & Deduplication Engine, 5. CLI Reference & Execution Modes (+12 more)
+Cohesion: 0.43
+Nodes (5): Gores, main(), runConsumer(), runProducer(), RunLiveBenchmark()
 
 ### Community 6 - "GoRes — High-Performance Distributed Job Queue"
 Cohesion: 0.12
@@ -97,29 +96,25 @@ Nodes (9): Demo 1 — Split-Terminal (The Classic, Takes 2 Minutes), Demo 2 — 
 Cohesion: 0.17
 Nodes (12): Cloud Deployment Guide, Deploying to Kubernetes, `docker-compose.yml`, `Dockerfile`, Manifests Overview, Option 1 — Railway (Easiest, Free Tier), Option 2 — Render (Free Tier, Similar to Railway), Option 3 — Docker Compose (Local or Any VPS) (+4 more)
 
-### Community 13 - "AGENTS.md — Developer & AI Agent Guide for GoRes"
-Cohesion: 0.10
-Nodes (20): 1. Job Serialization & Memory Management ([`pkg/gores/job.go`](file:///home/jangi/projects/gores/pkg/gores/job.go)), 1. Project Overview & Mission, 2. Redis Client & Atomicity ([`pkg/gores/gores.go`](file:///home/jangi/projects/gores/pkg/gores/gores.go)), 2. Repository Structure & Layout, 3. Core Architecture & Key Design Decisions, 3. Worker Pool & Fault Tolerance ([`pkg/gores/worker.go`](file:///home/jangi/projects/gores/pkg/gores/worker.go)), 4. Idempotency & Deduplication Engine, 5. CLI Reference & Execution Modes (+12 more)
-
 ## Knowledge Gaps
-- **65 isolated node(s):** `myproject/gores`, `Core Metrics & Capabilities`, `2. Repository Structure & Layout`, `1. Job Serialization & Memory Management ([`pkg/gores/job.go`](file:///home/jangi/projects/gores/pkg/gores/job.go))`, `2. Redis Client & Atomicity ([`pkg/gores/gores.go`](file:///home/jangi/projects/gores/pkg/gores/gores.go))` (+60 more)
+- **41 isolated node(s):** `myproject/gores`, `Demo 1 — Split-Terminal (The Classic, Takes 2 Minutes)`, `Demo 2 — redis-cli MONITOR (Watch Jobs Flow in Real Time)`, `Demo 3 — The Throughput Benchmark (Most Impressive Number)`, `Demo 4 — Scale Workers Live (Shows Horizontal Scaling)` (+36 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `NewGores()` connect `newTestConfig` to `InitConfig`, `NewGores`, `Gores`?**
-  _High betweenness centrality (0.094) - this node is a cross-community bridge._
-- **Why does `TestWorker_ExecutionIdempotency()` connect `newTestConfig` to `PutJob`?**
-  _High betweenness centrality (0.043) - this node is a cross-community bridge._
-- **Why does `PutJob()` connect `PutJob` to `NewGores`, `newTestConfig`, `Gores`?**
-  _High betweenness centrality (0.036) - this node is a cross-community bridge._
+- **Why does `NewGores()` connect `NewGores` to `InitConfig`, `newTestConfig`, `Gores`, `main`?**
+  _High betweenness centrality (0.164) - this node is a cross-community bridge._
+- **Why does `TestWorker_ExecutionIdempotency()` connect `NewGores` to `PutJob`, `newTestConfig`?**
+  _High betweenness centrality (0.076) - this node is a cross-community bridge._
+- **Why does `PutJob()` connect `PutJob` to `NewGores`, `Gores`?**
+  _High betweenness centrality (0.064) - this node is a cross-community bridge._
 - **Are the 18 inferred relationships involving `NewGores()` (e.g. with `main()` and `BenchmarkEnqueue()`) actually correct?**
   _`NewGores()` has 18 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 9 inferred relationships involving `newTestConfig()` (e.g. with `TestEnqueue_Idempotency()` and `TestEnqueueBatch_Idempotency()`) actually correct?**
   _`newTestConfig()` has 9 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 8 inferred relationships involving `PutJob()` (e.g. with `.Enqueue()` and `.EnqueueBatch()`) actually correct?**
   _`PutJob()` has 8 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `myproject/gores`, `Core Metrics & Capabilities`, `2. Repository Structure & Layout` to the rest of the system?**
-  _65 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `myproject/gores`, `Demo 1 — Split-Terminal (The Classic, Takes 2 Minutes)`, `Demo 2 — redis-cli MONITOR (Watch Jobs Flow in Real Time)` to the rest of the system?**
+  _41 weakly-connected nodes found - possible documentation gaps or missing edges._

@@ -1,0 +1,228 @@
+{
+  "communities": {
+    "0": [
+      "gores_gores_processjob",
+      "gores_gores_startworkers",
+      "gores_job",
+      "gores_job_tobytes",
+      "gores_job_validate",
+      "pkg_gores_benchmark_test_runbenchmarks",
+      "pkg_gores_job",
+      "pkg_gores_job_frombytes",
+      "pkg_gores_job_getjob",
+      "pkg_gores_job_putjob",
+      "pkg_gores_job_test",
+      "pkg_gores_job_test_go_t",
+      "pkg_gores_job_test_testfrombytesinvaliddata",
+      "pkg_gores_job_test_testjobvalidateerrors",
+      "pkg_gores_job_test_testmsgpackroundtrip",
+      "pkg_gores_job_test_testpoolreuseclearsfields",
+      "pkg_gores_worker_go_gores_gores"
+    ],
+    "1": [
+      "gores_config",
+      "pkg_gores_config",
+      "pkg_gores_config_initconfig",
+      "pkg_gores_config_test",
+      "pkg_gores_config_test_go_t",
+      "pkg_gores_config_test_testinitconfig_invalidjson",
+      "pkg_gores_config_test_testinitconfig_missingfile",
+      "pkg_gores_config_test_testinitconfig_missingredissection",
+      "pkg_gores_config_test_testinitconfig_partialdefaults",
+      "pkg_gores_config_test_testinitconfig_valid",
+      "pkg_gores_live_bench",
+      "pkg_gores_live_bench_runlivebenchmark"
+    ],
+    "2": [
+      "b",
+      "pkg_gores_benchmark_test",
+      "pkg_gores_benchmark_test_benchmarkenqueue",
+      "pkg_gores_benchmark_test_benchmarkenqueuebatch10",
+      "pkg_gores_benchmark_test_benchmarkenqueuebatch100",
+      "pkg_gores_benchmark_test_benchmarkinfo",
+      "pkg_gores_benchmark_test_benchmarkjobfrombytes",
+      "pkg_gores_benchmark_test_benchmarkjobpool",
+      "pkg_gores_benchmark_test_benchmarkjobpoolnowrite",
+      "pkg_gores_benchmark_test_benchmarkjobtobytes",
+      "pkg_gores_benchmark_test_benchmarkprocessjob"
+    ],
+    "3": [
+      "config",
+      "pkg_gores_gores_newgores",
+      "pkg_gores_worker_test",
+      "pkg_gores_worker_test_go_t",
+      "pkg_gores_worker_test_testprocessjob_emptypayload",
+      "pkg_gores_worker_test_testprocessjob_nilargs",
+      "pkg_gores_worker_test_testprocessjob_tasknotfound",
+      "pkg_gores_worker_test_testprocessjoberrorpaths",
+      "pkg_gores_worker_test_testprocessjobretryeventuallysucceeds",
+      "pkg_gores_worker_test_testprocessjobsuccess"
+    ],
+    "4": [
+      "gores_gores_close",
+      "gores_gores_enqueue",
+      "gores_gores_enqueuebatch",
+      "gores_gores_getjobstatus",
+      "gores_gores_info",
+      "pkg_gores_gores",
+      "pkg_gores_gores_go_gores_gores",
+      "pool"
+    ],
+    "5": [
+      "gores",
+      "main",
+      "main_main",
+      "main_runconsumer",
+      "main_runproducer"
+    ],
+    "6": [
+      "pkg_gores_gores_test",
+      "pkg_gores_gores_test_go_t",
+      "pkg_gores_gores_test_newtestconfig",
+      "pkg_gores_gores_test_testenqueueandinfocounts",
+      "pkg_gores_gores_test_testenqueuebatch100"
+    ],
+    "7": [
+      "pkg_gores_idempotency_test",
+      "pkg_gores_idempotency_test_testenqueue_idempotency",
+      "pkg_gores_idempotency_test_testenqueuebatch_idempotency",
+      "pkg_gores_idempotency_test_testworker_executionidempotency",
+      "t"
+    ],
+    "8": [
+      "pkg_gores_constants"
+    ],
+    "9": [
+      "pkg_gores_worker"
+    ],
+    "10": [
+      "pkg_myproject_gores"
+    ]
+  },
+  "cohesion": {
+    "0": 0.22794117647058823,
+    "1": 0.30303030303030304,
+    "2": 0.32727272727272727,
+    "3": 0.4222222222222222,
+    "4": 0.39285714285714285,
+    "5": 0.7,
+    "6": 0.7,
+    "7": 0.6,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0
+  },
+  "gods": [
+    {
+      "id": "pkg_gores_gores_newgores",
+      "label": "NewGores()",
+      "degree": 21
+    },
+    {
+      "id": "pkg_gores_job_putjob",
+      "label": "PutJob()",
+      "degree": 11
+    },
+    {
+      "id": "pkg_gores_gores_test_newtestconfig",
+      "label": "newTestConfig()",
+      "degree": 10
+    },
+    {
+      "id": "pkg_gores_job_getjob",
+      "label": "GetJob()",
+      "degree": 10
+    },
+    {
+      "id": "pkg_gores_job_frombytes",
+      "label": "FromBytes()",
+      "degree": 9
+    },
+    {
+      "id": "pkg_gores_config_initconfig",
+      "label": "InitConfig()",
+      "degree": 8
+    },
+    {
+      "id": "pkg_gores_gores_go_gores_gores",
+      "label": "Gores",
+      "degree": 8
+    },
+    {
+      "id": "gores_job",
+      "label": "Job",
+      "degree": 6
+    },
+    {
+      "id": "pkg_gores_idempotency_test_testworker_executionidempotency",
+      "label": "TestWorker_ExecutionIdempotency()",
+      "degree": 5
+    },
+    {
+      "id": "pkg_gores_benchmark_test_benchmarkjobpool",
+      "label": "BenchmarkJobPool()",
+      "degree": 4
+    }
+  ],
+  "surprises": [
+    {
+      "source": "main()",
+      "target": "NewGores()",
+      "source_files": [
+        "main.go",
+        "pkg/gores/gores.go"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "BenchmarkJobPool()",
+      "target": "GetJob()",
+      "source_files": [
+        "pkg/gores/benchmark_test.go",
+        "pkg/gores/job.go"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "BenchmarkJobPool()",
+      "target": "PutJob()",
+      "source_files": [
+        "pkg/gores/benchmark_test.go",
+        "pkg/gores/job.go"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "BenchmarkJobFromBytes()",
+      "target": "FromBytes()",
+      "source_files": [
+        "pkg/gores/benchmark_test.go",
+        "pkg/gores/job.go"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "BenchmarkEnqueue()",
+      "target": "NewGores()",
+      "source_files": [
+        "pkg/gores/benchmark_test.go",
+        "pkg/gores/gores.go"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

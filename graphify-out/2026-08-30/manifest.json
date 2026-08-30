@@ -178,15 +178,5 @@
     "mtime": 1788111393.3304927,
     "ast_hash": "780f330a54ad6bd64fc4c29dccf6ff23",
     "semantic_hash": ""
-  },
-  "AGENTS.md": {
-    "mtime": 1788111618.922443,
-    "ast_hash": "4f4f4d9402dac0379f6e9b4d6109753a",
-    "semantic_hash": ""
-  },
-  "agent.md": {
-    "mtime": 1788111635.7736511,
-    "ast_hash": "4f4f4d9402dac0379f6e9b4d6109753a",
-    "semantic_hash": ""
   }
 }
