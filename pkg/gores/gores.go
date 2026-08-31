@@ -2,6 +2,10 @@ package gores
 
 import (
 	"fmt"
+	"net"
+	"net/url"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/garyburd/redigo/redis"
@@ -79,6 +83,64 @@ const luaEnqueueBatch = `
 	return enqueuedCount
 `
 
+func dialRedisURL(rawurl string) (redis.Conn, error) {
+	u, err := url.Parse(rawurl)
+	if err != nil {
+		return nil, err
+	}
+	if u.Scheme != "redis" && u.Scheme != "rediss" {
+		return nil, fmt.Errorf("invalid redis URL scheme: %s", u.Scheme)
+	}
+
+	host, port, err := net.SplitHostPort(u.Host)
+	if err != nil {
+		host = u.Host
+		port = "6379"
+	}
+	if host == "" {
+		host = "localhost"
+	}
+	address := net.JoinHostPort(host, port)
+
+	var options []redis.DialOption
+	if u.Scheme == "rediss" {
+		options = append(options, redis.DialUseTLS(true))
+	}
+
+	conn, err := redis.Dial("tcp", address, options...)
+	if err != nil {
+		return nil, err
+	}
+
+	if u.User != nil {
+		username := u.User.Username()
+		password, hasPassword := u.User.Password()
+		if username != "" && hasPassword {
+			if _, err := conn.Do("AUTH", username, password); err != nil {
+				conn.Close()
+				return nil, err
+			}
+		} else if hasPassword {
+			if _, err := conn.Do("AUTH", password); err != nil {
+				conn.Close()
+				return nil, err
+			}
+		}
+	}
+
+	if u.Path != "" && u.Path != "/" {
+		dbStr := strings.TrimPrefix(u.Path, "/")
+		if db, err := strconv.Atoi(dbStr); err == nil && db != 0 {
+			if _, err := conn.Do("SELECT", db); err != nil {
+				conn.Close()
+				return nil, err
+			}
+		}
+	}
+
+	return conn, nil
+}
+
 func NewGores(config *Config) *Gores {
 	pool := &redis.Pool{
 		MaxIdle:     config.Redis.MaxIdle,
@@ -86,7 +148,7 @@ func NewGores(config *Config) *Gores {
 		IdleTimeout: time.Duration(config.Redis.IdleTimeout) * time.Second,
 		Dial: func() (redis.Conn, error) {
 			if config.Redis.URL != "" {
-				return redis.DialURL(config.Redis.URL)
+				return dialRedisURL(config.Redis.URL)
 			}
 			return redis.Dial("tcp", fmt.Sprintf("%s:%d", config.Redis.Host, config.Redis.Port))
 		},
