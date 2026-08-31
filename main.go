@@ -5,6 +5,8 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
+	"os"
 	"time"
 
 	"myproject/gores/pkg/gores"
@@ -58,6 +60,16 @@ func runProducer(g *gores.Gores, count int, useIdemp bool) {
 
 func runConsumer(g *gores.Gores, numWorkers int) {
 	fmt.Println("🚀 Consume: Starting", numWorkers, "workers...")
+	if port := os.Getenv("PORT"); port != "" {
+		http.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		})
+		go func() {
+			if err := http.ListenAndServe(":"+port, nil); err != nil {
+				log.Printf("Health server: %v", err)
+			}
+		}()
+	}
 	g.StartWorkers(numWorkers, tasks)
 }
 
