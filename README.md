@@ -208,6 +208,7 @@ See **[DEMO.md](DEMO.md)** for:
 
 ---
 
+
 ## Dependencies
 
 | Package | Purpose |
@@ -216,6 +217,7 @@ See **[DEMO.md](DEMO.md)** for:
 | `github.com/vmihailenco/msgpack/v5` | Binary serialization for jobs |
 
 ---
+
 
 ## License
 
