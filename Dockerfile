@@ -11,4 +11,6 @@ FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /app/gores .
 COPY config.json .
+EXPOSE 8080
 ENTRYPOINT ["./gores"]
+CMD ["-o", "consume", "-w", "3"]
