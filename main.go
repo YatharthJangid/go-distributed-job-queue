@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 
@@ -50,7 +51,10 @@ const dashboardHTML = `<!doctype html>
 <body>
   <h1>GoRes distributed job queue</h1>
   <p>Redis-backed jobs, pooled objects, retries, idempotency, and concurrent workers.</p>
-  <button id="run" onclick="runDemo()">Run 100-job demo</button>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <button id="run" onclick="runDemo(100)">Run 100-job demo</button>
+    <button id="run1k" onclick="runDemo(1000)" style="background:#4f46e5;">Run 1,000-job demo</button>
+  </div>
   <div id="status">Loading queue statistics…</div>
   <section class="grid">
     <div class="card">Processed<span class="value" id="processed">—</span></div>
@@ -61,7 +65,16 @@ const dashboardHTML = `<!doctype html>
   </section>
   <script>
     let run = null;
+    let pollInterval = 1000;
+    let timerId = null;
     const $ = id => document.getElementById(id);
+
+    function setPollRate(ms) {
+      if (pollInterval === ms && timerId) return;
+      pollInterval = ms;
+      if (timerId) clearInterval(timerId);
+      timerId = setInterval(refresh, pollInterval);
+    }
 
     async function refresh() {
       try {
@@ -70,34 +83,49 @@ const dashboardHTML = `<!doctype html>
         const stats = await response.json();
         ['processed', 'pending', 'enqueued', 'duplicates'].forEach(key => $(key).textContent = stats[key]);
         $('workers').textContent = stats.workers + ' local';
-        if (run && stats.processed >= run.target && stats.pending === 0) {
-          const seconds = Math.max(0.001, stats.demo_elapsed_ms / 1000);
-          $('status').textContent = run.count + ' jobs finished in ' + seconds.toFixed(2) + ' seconds (' + Math.round(run.count / seconds) + ' jobs/sec)';
-          $('run').disabled = false;
-          run = null;
+        if (run) {
+          const isFinished = (stats.processed >= run.target && stats.pending === 0) || (!stats.demo_running && stats.demo_elapsed_ms > 0);
+          if (isFinished) {
+            const ms = stats.demo_elapsed_ms || 1;
+            const seconds = Math.max(0.001, ms / 1000);
+            const rate = Math.round(run.count / seconds);
+            const timeStr = ms < 1000 ? ms + ' ms (' + seconds.toFixed(3) + 's)' : seconds.toFixed(2) + 's';
+            $('status').textContent = '⚡ ' + run.count + ' jobs finished in ' + timeStr + ' (' + rate.toLocaleString() + ' jobs/sec)';
+            $('run').disabled = false;
+            const b1k = $('run1k');
+            if (b1k) b1k.disabled = false;
+            run = null;
+            setPollRate(1000);
+          }
         }
       } catch (error) {
         $('status').textContent = 'Waiting for Redis…';
       }
     }
 
-    async function runDemo() {
+    async function runDemo(count = 100) {
       $('run').disabled = true;
-      $('status').textContent = 'Enqueuing 100 jobs…';
+      const b1k = $('run1k');
+      if (b1k) b1k.disabled = true;
+      $('status').textContent = 'Enqueuing ' + count + ' jobs…';
+      setPollRate(100);
       try {
-        const response = await fetch('/api/demo', {method: 'POST'});
+        const response = await fetch('/api/demo?n=' + count, {method: 'POST'});
         if (!response.ok) throw new Error(await response.text());
         const demo = await response.json();
         run = {count: demo.count, target: demo.target};
-        $('status').textContent = 'Workers are processing the jobs…';
+        $('status').textContent = 'Workers are processing ' + count + ' jobs…';
+        refresh();
       } catch (error) {
         $('status').textContent = error.message || 'Demo failed';
         $('run').disabled = false;
+        if (b1k) b1k.disabled = false;
+        setPollRate(1000);
       }
     }
 
     refresh();
-    setInterval(refresh, 1000);
+    timerId = setInterval(refresh, 1000);
   </script>
 </body>
 </html>`
@@ -208,7 +236,13 @@ func runConsumer(g *gores.Gores, numWorkers int) {
 			return
 		}
 		processed, _ := info["processed"].(int)
-		batch := makeDemoBatch(dashboardJobCount, false)
+		count := dashboardJobCount
+		if qCount := r.URL.Query().Get("n"); qCount != "" {
+			if parsed, err := strconv.Atoi(qCount); err == nil && parsed > 0 && parsed <= 10000 {
+				count = parsed
+			}
+		}
+		batch := makeDemoBatch(count, false)
 		if err := g.EnqueueBatch(batch); err != nil {
 			http.Error(w, "enqueue failed", http.StatusServiceUnavailable)
 			return
@@ -217,6 +251,36 @@ func runConsumer(g *gores.Gores, numWorkers int) {
 		demoStartedAt = time.Now()
 		demoElapsed = 0
 		demoRunning = true
+
+		go func(started time.Time, target int) {
+			ticker := time.NewTicker(10 * time.Millisecond)
+			defer ticker.Stop()
+			for range ticker.C {
+				demoMu.Lock()
+				if !demoRunning || demoStartedAt != started {
+					demoMu.Unlock()
+					return
+				}
+				demoMu.Unlock()
+
+				inf, err := g.Info()
+				if err != nil {
+					continue
+				}
+				p, _ := inf["processed"].(int)
+				pend, _ := inf["pending"].(int)
+				if p >= target && pend == 0 {
+					demoMu.Lock()
+					if demoRunning && demoStartedAt == started {
+						demoElapsed = time.Since(started)
+						demoRunning = false
+					}
+					demoMu.Unlock()
+					return
+				}
+			}
+		}(demoStartedAt, demoTarget)
+
 		writeJSON(w, map[string]interface{}{
 			"count":  len(batch),
 			"target": demoTarget,
